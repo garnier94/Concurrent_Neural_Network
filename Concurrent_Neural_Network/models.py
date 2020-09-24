@@ -32,6 +32,15 @@ class Concurrent_Module(nn.Module):
         return self.sum_factor * fx / fx.sum()
 
     def train(self, data_loader, max_epochs=100, eval_dataset=None, keep_trace=False, batch_print = 10):
+        """
+        Train the underlying submodule
+        :param data_loader: Collection of [features,samples] batch used for training
+        :param max_epochs: number of epochs used for training
+        :param eval_dataset: if None, nothing happens. Otherwise, it could be a data_loader of similar format used for testing
+        :param keep_trace: TODO
+        :param batch_print: print a message every batch_print epoch
+        :return:
+        """
         trace = []
         sum_train = sum([sum(local_labels) for _, local_labels in data_loader])
         for epoch in range(max_epochs):
@@ -53,6 +62,11 @@ class Concurrent_Module(nn.Module):
                     _ = self.eval(eval_dataset)
 
     def eval(self, data_loader):
+        """
+        Evaluation of the module on a testing set
+        :param data_loader: Collection of [features,samples] batch used for evaluation
+        :return:
+        """
         sum_label = 0
         sum_error = 0
         for X_test, y_test in data_loader:
