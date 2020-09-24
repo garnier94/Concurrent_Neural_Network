@@ -21,9 +21,9 @@ class Feed_forward_model(nn.Module):
 
 
 X = [[[10, 1], [1, 2], [9, 1], [1, 2]], [[8, 1], [4, 2], [1, 1], [3, 1]], [[0, 1], [1, 2], [2, 1], [1, 4]]]
-y = [[4, 3, 2, 1], [3, 1, 4, 2], [0, 3, 4, 3], [4, 0, 3, 3]]
+y = [[4, 3, 2, 1], [3, 1, 4, 2], [0, 3, 4, 3]]
 data_loader = [[torch.tensor(np.array(X[i]).astype(np.float32)), torch.tensor(np.array(y[i]).astype(np.float32))] for i
-               in range(4)]
+               in range(3)]
 
 n_input = 2
 n_hidden = 2
