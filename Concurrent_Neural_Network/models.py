@@ -61,7 +61,7 @@ class Concurrent_Module(nn.Module):
                 if not eval_dataset is None:
                     _ = self.eval(eval_dataset)
 
-    def eval(self, data_loader):
+    def eval(self, data_loader,  horizon=6, shift_list=[0, 1]):
         """
         Evaluation of the module on a testing set
         :param data_loader: Collection of [features,samples] batch used for evaluation

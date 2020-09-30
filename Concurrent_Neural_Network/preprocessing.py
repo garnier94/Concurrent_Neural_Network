@@ -26,7 +26,7 @@ def filter_index_from_dataframe(df, target_column, minimal_sum_target=100, minim
     return pd.concat(final_sud_dataframe_list, keys=final_index_list, names=['product']), final_index_list
 
 
-def compute_proportion(data, target_column='Vente lisse', resize=None):
+def compute_proportion(data, target_column, resize=None):
     """
 
     :param data:  pd.DataFrame indexed by [spatial_index, temporal_index]
@@ -34,7 +34,7 @@ def compute_proportion(data, target_column='Vente lisse', resize=None):
     :param resize: if None, there is no resizing, and the proportion sum to one , otherwise to resize to sum the proportion
     :return:
     """
-    product_list = set(data.inde.get_level_values(0))
+    product_list = set(data.index.get_level_values(0))
     sum_product = data.groupby(level=1)[target_column].sum()
     data = data.join(sum_product, rsuffix='_somme')
     alpha = 1
