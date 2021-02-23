@@ -1,11 +1,9 @@
 import pandas as pd
 import sys, configparser
 from Concurrent_Neural_Network.preprocessing import filter_index_from_dataframe, compute_proportion,add_temporal_features
-from concurrent_lstm import DATA_CONCURRENCE
 from path import Path
 
-family = sys.argv[1]
-data = pd.read_csv(DATA_CONCURRENCE / 'data_' + family + '.csv', sep=';')
+data = pd.read_csv( 'data_example.csv', sep=';')
 CONFIG_CONTAINER = configparser.RawConfigParser()
 CONFIG_CONTAINER.read(Path(__file__).parent / '../config.cfg')
 
