@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+import torch
 
 def filter_index_from_dataframe(df, target_column, minimal_sum_target=100, minimal_positive_length=20):
     """
@@ -56,3 +58,19 @@ def add_temporal_features(data, target='proportion', horizon=6, shift_list=[0, 1
     for shift_i in shift_list:
         data[target + '_shift_' + str(shift_i + horizon)] = data.groupby(level=0)[target].shift(shift_i + horizon)
     return data[data[target + '_shift_' + str(shift_i + horizon)].notna()]
+
+def dataframe_to_data_loader(data, features,target):
+    """
+    Tranform a pandas DataFrame into a data_loader suited for 
+    data: pd.DataFrame indexed by [spatial_index, temporal_index]
+    target : Target columns name in the dataframe
+    features: Features used for learning
+    """
+    date_index = list(set(data.index.get_level_values(1)))#List of the date existing in the dataset
+    date_index.sort()
+    data_loader= []
+    for dt in date_index:
+        feat_dt = data[data.index.get_level_values(1)==dt ][features].values.astype(np.float32)
+        target_dt = data[data.index.get_level_values(1)==dt ][target].values.astype(np.float32)
+        data_loader.append([torch.tensor(feat_dt), torch.tensor(target_dt)])
+    return data_loader
