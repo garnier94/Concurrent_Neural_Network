@@ -5,8 +5,8 @@ def filter_index_from_dataframe(df, target_column, minimal_sum_target=100, minim
     Filter the dataframe
     :param df: pd.DataFrame indexed by [spatial_index, temporal_index]
     :param target_column: The target value of interest
-    :param minimal_sum_target:
-    :param minimal_positive_length:
+    :param minimal_sum_target: A product must have at least minimal_sum to be considered
+    :param minimal_positive_length: A product must have been sold during at least minimal_positive_length to be considered
     :return:
     """
     final_index_list = []
@@ -39,9 +39,9 @@ def compute_proportion(data, target_column, resize=None):
     data = data.join(sum_product, rsuffix='_somme')
     alpha = 1
     if not resize is None:
-        alpha = resize * len(set(data.index.get_level_values(0)))
+        alpha = resize 
     data['proportion'] = alpha * data[target_column] / data[target_column + '_somme']
-    return data, sum_product, product_list
+    return data, sum_product, product_list 
 
 
 def add_temporal_features(data, target='proportion', horizon=6, shift_list=[0, 1]):
