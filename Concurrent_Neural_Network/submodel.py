@@ -13,11 +13,14 @@ class Multi_layer_feed_forward_model(nn.Module):
         """
         super().__init__()
         self.list_layer = []
-        n_h = n_hidden + [1]
-        for i in range(len(n_hidden)) :
+        n_h = [n_input] + n_hidden + [1]
+        for i in range(len(n_hidden)+1) :
             self.list_layer.append(nn.Linear(n_h[i], n_h[i+1], bias=False))
         self.n_input = n_input
         self.n_hidden = n_hidden
+
+    def parameters(self):
+        return [list(layer.parameters())[0] for layer in self.list_layer]
 
     def forward(self, x):
         for j,lay in enumerate(self.list_layer):
