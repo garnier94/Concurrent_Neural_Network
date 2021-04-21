@@ -61,9 +61,9 @@ class Concurrent_Module(nn.Module):
                 if not eval_dataset is None:
                     _ = self.eval(eval_dataset)
 
-    def eval(self, data_loader,  horizon=6, shift_list=[0, 1]):
+    def eval(self, data_loader, return_MAPE = False):
         """
-        Evaluation of the module on a testing set
+        Evaluation of the module on a testing set (for L1 Loss)
         :param data_loader: Collection of [features,samples] batch used for evaluation
         :return:
         """
@@ -73,5 +73,8 @@ class Concurrent_Module(nn.Module):
             prediction = self.forward(X_test)
             sum_error += self.loss_function(prediction[:, 0], y_test)
             sum_label += sum(y_test)
-        print('Test MAPE: %.4f \n' % (100 * sum_error / sum_label))
-        return prediction
+        if return_MAPE:
+            return (100 * sum_error / sum_label)
+        else:
+            print('Test MAPE: %.4f \n' % (100 * sum_error / sum_label))
+            return prediction
