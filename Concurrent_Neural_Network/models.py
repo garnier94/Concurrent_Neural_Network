@@ -31,7 +31,7 @@ class Concurrent_Module(nn.Module):
         fx = self.submodule.forward(x)
         return self.sum_factor * fx / fx.sum()
 
-    def train(self, data_loader, max_epochs=100, eval_dataset=None, keep_trace=False, batch_print = 10):
+    def train(self, data_loader, max_epochs=100, eval_dataset=None, keep_trace=False, batch_print = 10, early_stopping = None):
         """
         Train the underlying submodule
         :param data_loader: Collection of [features,samples] batch used for training
@@ -42,6 +42,9 @@ class Concurrent_Module(nn.Module):
         :return:
         """
         trace = []
+        if early_stopping is not None:
+            cur_stopping = 0
+            min_epoch_loss = float('inf')
         sum_train = sum([sum(local_labels) for _, local_labels in data_loader])
         for epoch in range(max_epochs):
             # Training
@@ -60,6 +63,18 @@ class Concurrent_Module(nn.Module):
                 print('Train MAPE: %.4f' % MAPE)
                 if not eval_dataset is None:
                     _ = self.eval(eval_dataset)
+            if early_stopping is not None:
+                if min_epoch_loss > epoch_loss:
+                    cur_stopping +=1
+                    if cur_stopping > early_stopping:
+                        break
+                else:
+                    cur_stopping = 0
+                    min_epoch_loss = epoch_loss
+
+
+
+
 
     def eval(self, data_loader, return_MAPE = False):
         """
