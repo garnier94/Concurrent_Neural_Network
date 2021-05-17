@@ -2,7 +2,7 @@ from Concurrent_Neural_Network.submodel import Multi_layer_feed_forward_model
 from Concurrent_Neural_Network.models import Concurrent_Module
 import pdb
 
-architectures = [[2],[4],[8],[2,2],[4,2],[4,4],[8,4],[2,2,2],[4,2,2],[8,4,2],[8,4,2]]
+architectures = [[4],[8],[2,2],[4,2],[4,4],[8,4],[2,2,2],[4,2,2],[8,4,2],[8,4,2]]
 
 def eval_architechures(data_train_loader,data_valid_loader,data_test_loader, n_input, output_file = None, verbose=False, **kwargs):
     ls_mape =[]
@@ -26,9 +26,9 @@ def eval_architechures(data_train_loader,data_valid_loader,data_test_loader, n_i
 
 
 def direct_Concurrent_NN_training(data_train_loader, data_valid_loader, architecture, n_input, verbose = True, **kwargs):
-    epochs = kwargs.get('epoch',100)
-    learning_rate = kwargs.get('learning_rate', 0.005)
-    nb_max_attempt = kwargs.get('nb_max_attempt', 10) # Max number of training attempt
+    epochs = int(kwargs.get('epochs',100))
+    learning_rate = float(kwargs.get('learning_rate', 0.005))
+    nb_max_attempt = kwargs.get('nb_max_attempt', 25) # Max number of training attempt
     nb_attempt = 0
     while nb_attempt < nb_max_attempt:
         submodel = Multi_layer_feed_forward_model(n_input, architecture)
